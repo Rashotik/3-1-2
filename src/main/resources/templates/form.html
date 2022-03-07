@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:with="lang=${#locale.language}" th:lang="${lang}">
+
+<head/>
+
+<body>
+
+    <ul>
+        <li><a th:href="@{/}">Home</a></li>
+        <li><a th:href="@{/admin}">User list</a></li>
+    </ul>
+<div>
+    <form th:method="POST" th:action="@{/admin}" th:object="${user}">
+        <input type="hidden" th:field="*{id}" th:value="*{getId()}">
+        <label for="name">Name</label>
+        <input type="text" id="name" th:field="*{username}" th:value="*{getUsername()}" placeholder="Enter user name" required>
+        <label for="password">Password</label>
+        <input type="password" id="password" th:field="*{password}" th:value="*{getPassword()}" placeholder="Enter password" required>
+
+        <button type="submit" th:text="*{getId()} ? 'Save' : 'Create'"/>
+        <a th:href="@{/admin}">Cancel</a>
+    </form>
+</div>
+</body>
+</html>

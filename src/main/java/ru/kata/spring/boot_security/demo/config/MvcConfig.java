@@ -1,4 +1,4 @@
-package com.boots.config;
+package ru.kata.spring.boot_security.demo.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -10,6 +10,6 @@ public class MvcConfig implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
-        registry.addViewController("/news").setViewName("news");
+        registry.addViewController("/user").setViewName("user");
     }
 }

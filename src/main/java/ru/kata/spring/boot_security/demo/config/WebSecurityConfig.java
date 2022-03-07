@@ -1,10 +1,9 @@
-package com.boots.config;
+package ru.kata.spring.boot_security.demo.config;
 
-import com.boots.service.UserService;
+import ru.kata.spring.boot_security.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -14,6 +13,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+    @Autowired
+    private SuccessUserHandler successUserHandler;
     @Autowired
     UserService userService;
 
@@ -28,22 +29,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
                     .disable()
                 .authorizeRequests()
-                    //Доступ только для не зарегистрированных пользователей
-                    .antMatchers("/registration").not().fullyAuthenticated()
-                    //Доступ только для пользователей с ролью Администратор
+                .antMatchers("/registration").not().fullyAuthenticated()
+                .antMatchers("/login").not().authenticated()
                     .antMatchers("/admin/**").hasRole("ADMIN")
-                    .antMatchers("/news").hasRole("USER")
-                    //Доступ разрешен всем пользователей
-                    .antMatchers("/", "/resources/**").permitAll()
-                //Все остальные страницы требуют аутентификации
-                .anyRequest().authenticated()
+                    .antMatchers("/user").hasRole("USER")
+                .anyRequest().permitAll()
+
                 .and()
-                    //Настройка для входа в систему
                     .formLogin()
                     .loginPage("/login")
-                    //Перенарпавление на главную страницу после успешного входа
                     .defaultSuccessUrl("/")
                     .permitAll()
+                .successHandler(successUserHandler)
+
                 .and()
                     .logout()
                     .permitAll()
