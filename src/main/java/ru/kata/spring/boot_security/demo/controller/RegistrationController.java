@@ -27,7 +27,6 @@ public class RegistrationController {
 
         if (!userService.saveUser(user))
             return "registration";
-        model.addAttribute("user", user);
         return "redirect:/";
     }
 }

@@ -25,7 +25,7 @@ public class AdminController {
         return "admin";
     }
 
-    @GetMapping(value = "/new")
+    @GetMapping(value = "admin/new")
     public String addUserForm(@ModelAttribute("user") User user) {
         return "form";
     }
@@ -41,9 +41,9 @@ public class AdminController {
         userService.saveUser(user);
         return "redirect:/admin";
     }
-    @GetMapping("/delete")
+    @GetMapping("/admin/delete")
     public String deleteUser(@RequestParam(value = "id", required = true, defaultValue = "") long id) {
         userService.deleteUser(id);
-        return "redirect:/users";
+        return "redirect:/admin";
     }
 }
