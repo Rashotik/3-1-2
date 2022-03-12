@@ -12,14 +12,12 @@
     <thead>
     <th>ID</th>
     <th>UserName</th>
-    <th>Password</th>
     <th>Roles</th>
     </thead>
     <tbody>
       <tr th:each="user : ${allUsers}">
         <td th:text="${user.id}"></td>
         <td th:text="${user.username}"></td>
-        <td th:text="${user.password}"></td>
         <td>
           <div th:each="role : ${user.roles}">
             <b th:text="${role.name}"></b>

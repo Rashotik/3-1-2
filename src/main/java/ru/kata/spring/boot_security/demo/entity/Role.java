@@ -3,26 +3,31 @@ package ru.kata.spring.boot_security.demo.entity;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "t_role")
 public class Role implements GrantedAuthority {
     @Id
-    private Long id;
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    protected Long id;
+@Transient
+    public boolean persisted() {
+        return id != null;
+    }
+
+
+    @Column(unique = true)
     private String name;
-    @Transient
+
     @ManyToMany(mappedBy = "roles")
-    private Set<User> users;
+    private List<User> users = new ArrayList<>();
+
     public Role() {
     }
 
-    public Role(Long id) {
-        this.id = id;
-    }
-
-    public Role(Long id, String name) {
-        this.id = id;
+    public Role(String name) {
         this.name = name;
     }
 
@@ -42,16 +47,12 @@ public class Role implements GrantedAuthority {
         this.name = name;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(Set<User> users) {
-        this.users = users;
+    public String getAuthority() {
+        return name;
     }
 
     @Override
-    public String getAuthority() {
-        return getName();
+    public String toString() {
+        return String.format("Role [id = %d; name = %s;]", id, name);
     }
 }

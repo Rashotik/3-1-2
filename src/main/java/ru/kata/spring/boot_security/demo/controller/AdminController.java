@@ -1,27 +1,32 @@
 package ru.kata.spring.boot_security.demo.controller;
 
-import ru.kata.spring.boot_security.demo.entity.User;
-import ru.kata.spring.boot_security.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.UnexpectedRollbackException;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import ru.kata.spring.boot_security.demo.entity.User;
+import ru.kata.spring.boot_security.demo.service.AppService;
+
+import javax.validation.Valid;
 
 @Controller
 public class AdminController {
     @Autowired
-    private UserService userService;
+    private AppService userService;
 
     @GetMapping("/admin")
     public String userList(Model model) {
-        model.addAttribute("allUsers", userService.allUsers());
+        model.addAttribute("allUsers", userService.findAllUsers());
         return "admin";
     }
 
 
     @GetMapping("/admin/get/{userId}")
     public String  gtUser(@PathVariable("userId") Long userId, Model model) {
-        model.addAttribute("allUsers", userService.findUserById(userId));
+        model.addAttribute("allUsers", userService.findUser(userId));
         return "admin";
     }
 
@@ -32,7 +37,7 @@ public class AdminController {
 
     @GetMapping("/admin/edit")
     public String editUserForm(@RequestParam(value = "id", required = true) long id, Model model) {
-        model.addAttribute("user", userService.findUserById(id));
+        model.addAttribute("user", userService.findUser(id));
         return "form";
     }
 
